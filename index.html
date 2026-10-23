@@ -4,12 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#10243a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ES3 Trend">
 <title>ES3 One-Year Trend</title>
-<link rel="icon" href="icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 <style>
 :root{--navy:#10243a;--blue:#1d4f78;--paper:#f4f7fa;--ink:#172535;--muted:#627184;--green:#147d54;--red:#b33a3a;--gold:#946200}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{background:var(--navy);color:white;padding:22px 18px 20px}header h1{margin:0;font-size:25px;letter-spacing:.2px}header p{margin:5px 0 0;color:#d5e2ee;font-size:14px}
+header{background:var(--navy);color:white;padding:calc(18px + env(safe-area-inset-top)) 18px 20px}header h1{margin:0;font-size:25px;letter-spacing:.2px}header p{margin:5px 0 0;color:#d5e2ee;font-size:14px}
 main{max-width:850px;margin:0 auto;padding:16px}
 .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .card{background:white;border:1px solid #e0e7ee;border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 2px 8px #10243a08}
@@ -41,6 +45,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:8px 15px 26px
     <div class="card"><div class="label">Overall trend</div><div class="value" style="font-size:20px" id="trend">—</div><div class="small">Compared with long-term averages</div></div>
     <div class="card"><div class="label">52-week high</div><div class="value" id="high">—</div></div>
     <div class="card"><div class="label">52-week low</div><div class="value" id="low">—</div></div>
+    <div class="card"><div class="label">Distance from 52-week high</div><div class="value" id="fromHigh">—</div><div class="small">How far price is below its yearly high</div></div>
+    <div class="card"><div class="label">Distance from 52-week low</div><div class="value" id="fromLow">—</div><div class="small">How far price is above its yearly low</div></div>
   </div>
   <div class="card">
     <strong>One-year price chart</strong>
@@ -95,6 +101,7 @@ function render(data,meta={}){
  $('trend').textContent=t;
  const hi=meta.high??Math.max(...closes),lo=meta.low??Math.min(...closes);
  $('high').textContent=money(hi);$('low').textContent=money(lo);
+ $('fromHigh').textContent=pct((last.close/hi-1)*100);$('fromLow').textContent=pct((last.close/lo-1)*100);
  const drop=(last.close/hi-1)*100;
  let pill='WAIT / HOLD',out='No strong trend signal from this simple rule set. Review your intended entry price and position size.';
  if(t==='Rising'){pill='POSITIVE TREND';out=desc+' Consider buying only if the price and your own entry rules remain acceptable.'}
